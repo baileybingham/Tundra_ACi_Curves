@@ -1,54 +1,42 @@
 # Julia's project ACi curves
 # Nov 20 2026
 
-## Step 1:
-# Load required packages
-library(PhotoGEA)
-library(lattice)
+library(plantecophys)
 
-# Check the PhotoGEA version
-expected_version  <- '1.4.0'
-installed_version <- as.character(packageVersion('PhotoGEA'))
+#M20 - Control
+Aci_M20 <- read.table("M20_CO2_Resp_2026-10-21-1433.csv", header=TRUE, sep=",")
+Fit_Aci_M20 <- fitaci(Aci_M20)
+plot(Fit_Aci_M20)
+summary(Fit_Aci_M20)
 
-if (compareVersion(expected_version, installed_version) != 0) {
-  warning(
-    'This script was written for PhotoGEA version ', expected_version,
-    ' but version ', installed_version,
-    ' is installed; this may cause unexpected errors to occur.'
-  )
-}
+#M04 - Control
+Aci_M04 <- read.table("M04_CO2_Resp_2026-10-21-1352.csv", header=TRUE, sep=",")
+Fit_Aci_M04 <- fitaci(Aci_M04)
+plot(Fit_Aci_M04)
+summary(Fit_Aci_M04)
 
-## Step 2: 
-# Define a vector of paths to the files we wish to load; in this case, we are
-# loading example files included with the PhotoGEA package
-file_paths <- c(
-  "M02_CO2_Resp_2026-10-19-1102.xlsx",
-  "M03_CO2_Resp_2026-10-16-1233.xlsx",
-  "M04_CO2_Resp_2026-10-21-1352.xlsx",
-  "M13_CO2_Resp_2026-10-19-1142.xlsx",
-  "M17_CO2_Resp_2026-10-20-1454.xlsx",
-  "M20_CO2_Resp_2026-10-21-1433.xlsx"
-)
+#M02 - Heat wave
+Aci_M02 <- read.table("M02_CO2_Resp_2026-10-19-1102.csv", header=TRUE, sep=",")
+Fit_Aci_M02_bi <- fitaci(Aci_M02, fitmethod = "bilinear")
+plot(Fit_Aci_M02_bi)
+summary(Fit_Aci_M02_bi)
+## Had to do fitmethod = "bilinear" (not totally sure what this means though) because I got the error 
+## "Error: Could not fit curve - check quality of data or fit using fitmethod='bilinear'." 
 
-## Step 3: 
-# Load each file, storing the result in a list
-gasex_exdf_list <- lapply(file_paths, function(fpath) {
-  read_gasex_file(fpath, 'time')
-})
+#M17 - Control
+Aci_M17 <- read.table("M17_CO2_Resp_2026-10-20-1454.csv", header=TRUE, sep=",")
+Fit_Aci_M17_bi <- fitaci(Aci_M17, fitmethod = "bilinear")
+plot(Fit_Aci_M17_bi)
+summary(Fit_Aci_M17_bi)
 
-## Step 4: 
-# Get the names of all columns that are present in all of the data files
-columns_to_keep <- do.call(identify_common_columns, gasex_exdf_list)
-# Extract just these columns
-gasex_exdf_list <- lapply(gasex_exdf_list, function(x) {
-  x[ , columns_to_keep, TRUE]
-})
-# Use `rbind` to combine all the data
-gasex_data <- do.call(rbind, gasex_exdf_list)
+#M13 - Heat wave
+Aci_M13 <- read.table("M13_CO2_Resp_2026-10-19-1142.csv", header=TRUE, sep=",")
+Fit_Aci_M13_bi <- fitaci(Aci_M13, fitmethod = "bilinear")
+plot(Fit_Aci_M13_bi)
+summary(Fit_Aci_M13_bi)
 
-## Step 5
-# Create a new identifier column formatted like `instrument - species - plot`
-gasex_data[ , 'curve_identifier'] <-
-  paste(gasex_data[ , 'Leaf number'], '-', gasex_data[ , 'Monolith'], '-', gasex_data[ , 'Functional group'])
-
-
+#M03 - Heat wave
+Aci_M03 <- read.table("M03_CO2_Resp_2026-10-16-1233.csv", header=TRUE, sep=",")
+Fit_Aci_M03_bi <- fitaci(Aci_M03, fitmethod = "bilinear")
+plot(Fit_Aci_M03_bi)
+summary(Fit_Aci_M03_bi)
