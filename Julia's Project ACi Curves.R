@@ -11,9 +11,9 @@ summary(Fit_Aci_M20)
 
 #M04 - Control
 Aci_M04 <- read.table("M04_CO2_Resp_2026-10-21-1352.csv", header=TRUE, sep=",")
-Fit_Aci_M04 <- fitaci(Aci_M04)
-plot(Fit_Aci_M04)
-summary(Fit_Aci_M04)
+Fit_Aci_M04_bi <- fitaci(Aci_M04, fitmethod = "bilinear")
+plot(Fit_Aci_M04_bi)
+summary(Fit_Aci_M04_bi)
 
 #M02 - Heat wave
 Aci_M02 <- read.table("M02_CO2_Resp_2026-10-19-1102.csv", header=TRUE, sep=",")
